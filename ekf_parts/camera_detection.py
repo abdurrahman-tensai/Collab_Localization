@@ -93,6 +93,7 @@ while True:
                 width  = int(x2) - int(x1)
                 height = int(y2) - int(y1)
                 area = width * height
+                ## The equation is fitted from experimental measurements
                 dist = 549*np.exp(-0.0001644*area) + 238.6*np.exp(-0.00001342*area)
 
                 ## Calculating the angle for the small chair
@@ -100,9 +101,8 @@ while True:
                 obj_x   = int((x1 + x2)/2.0)    # the center of the object; [px]
 
                 i_px = frame_x - obj_x  # the x distance of the object in pixels; [px]
-                px2mm = 1.12*(1.0/1000) # conversion factor from pixels to mm
-                # image_width = 416
-                # px2mm = 1.12*(1.0/1000) * (3280/image_width) # conversion factor from pixels to mm
+                px2mm = 7.3*(1.0/1000) # conversion factor from pixels to mm
+                
                 f_mm = 2.85             # focal length of the camera; [mm]
 
                 angle = np.arctan((i_px * px2mm)/f_mm) # calculating the angle; [rad]
