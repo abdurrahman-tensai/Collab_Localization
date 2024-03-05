@@ -1,2 +1,2 @@
-# Dual_Localization
+# Collab_Localization
 Localization project 
