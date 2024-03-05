@@ -109,7 +109,7 @@ while True:
 
                 text_msg1 = "THE OBJECT IS:  " + str(class_name) + "  AND ITS CONFIDENCE IS  " + str(confidence)
                 text_msg2 = "THE DISTANCE TO THE OBJECT IS:  " + str(dist)
-                text_msg3 = "AND ITS ANGLE (degrees) IS:  " + str(angle)
+                text_msg3 = "AND ITS ANGLE (radians) IS:  " + str(angle)
 
                 print(text_msg1)
                 print(text_msg2)
