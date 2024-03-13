@@ -28,7 +28,7 @@ class RobotMover:
         twist.linear.x = 0.1
 
         # Angular velocity (turn) in rad/s
-        twist.angular.z = 0.05  # relation between radius, v, and w: v = r * w
+        twist.angular.z = 0.1  # relation between radius, v, and w: v = r * w
 
         # Publish the message
         self.pub.publish(twist)
