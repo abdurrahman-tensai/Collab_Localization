@@ -45,8 +45,8 @@ class TopicReader:
 
 
         self.distance = [10.0, 20.0, 30.0]
-        self.bearing  = [45.0, 90.0, 135.0]
-        print(" ======================================= ")
+        self.bearing  = [0, -0.25, 0.25]
+
         print("DISTANCE:   " + str(self.distance) + "      BEARNING ANGLE:   " + str(self.bearing))
 
     ## This would be lates used to save the data 
