@@ -24,11 +24,13 @@ class RobotMover:
         # Create a Twist message
         twist = Twist()
 
+        ## relation between radius, v, and w: v = r * w
+        
         # Linear velocity (forward) in m/s
         twist.linear.x = 0.1
 
         # Angular velocity (turn) in rad/s
-        twist.angular.z = 0.1  # relation between radius, v, and w: v = r * w
+        twist.angular.z = 0.1
 
         # Publish the message
         self.pub.publish(twist)
