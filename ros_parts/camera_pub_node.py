@@ -11,13 +11,15 @@
 #       Distance is in cm, bearning angle is in radians
 #
 #   Written by      : Abdurrahman
-#   Last Modified   : 13 / 03 / 2024
+#   Last Modified   : 14 / 03 / 2024
 #
 ###############################################################################
 
 
 import rospy
+import cv2
 from std_msgs.msg import Float64MultiArray
+from image_processing import cam_obj_det
 
 class CameraPublisher:
     def __init__(self, distance_topic, bearing_topic):
@@ -30,9 +32,10 @@ class CameraPublisher:
     
     def detect_objects(self):
         # This is where you put your object detection code
-        # For now, we'll just return some dummy data
-        distances = [10.0, 20.0, 30.0]
-        bearings = [45.0, 90.0, 135.0]
+        # distances, bearings = cam_obj_det(self.cap)
+
+        distances = [0, 50, 100, 200]
+        bearings = [0, -0.25, 0.25, 0.5]
         return distances, bearings
     
     def publish_data(self):
