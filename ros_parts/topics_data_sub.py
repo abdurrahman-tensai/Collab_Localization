@@ -14,17 +14,24 @@
 
 import rospy
 from nav_msgs.msg import Odometry  # message typr to get /odom data
-# import pandas as pd
+from std_msgs.msg import Float64MultiArray
+import numpy as np
 import tf
 
 
 class TopicReader:
     def __init__(self, topic_name):
-        self.data = []
+        ## Initializing the variables to be used for storing data
+        self.pose_data     = [] # robot pose data: x, y, theta
+        self.distance_data = [] # camera distance data to objects
+        self.bearing_data  = [] # camera bearing angle data to objects
+
         self.topic_name = topic_name
 
         # Initialize the subscriber
         self.sub = rospy.Subscriber(self.topic_name, Odometry, self.odom_callback) 
+        self.dist_sub = rospy.Subscriber("/distance", Float64MultiArray, self.dist_callback)
+        self.angle_sub = rospy.Subscriber("/bearing", Float64MultiArray, self.angle_callback)
 
     def odom_callback(self, msg):
         # # Append the data to the list
@@ -40,40 +47,50 @@ class TopicReader:
         self.odom_theta = tf.transformations.euler_from_quaternion(quater) # Convert the orientation to Euler (3x1)
         self.odom_theta = self.odom_theta[2]
 
-        print(" ======================================= ")
+        ## Printing the data on the terminal for debugging
+        print(" =========================================================== ")
         print("POSE X:  " + str(self.odom_x) + "     POSE Y:  " + str(self.odom_y) + "      THETA:  " + str(self.odom_theta))
 
+        ## Append the data to the list to later be saved
+        self.pose_data.append([self.odom_x, self.odom_y, self.odom_theta])
+        
+    def dist_callback(self, msg):
+        distances = msg.data
 
-        self.distance = [10.0, 20.0, 30.0]
-        self.bearing  = [0, -0.25, 0.25]
+        print("DISTANCE:   " + str(distances))
 
-        print("DISTANCE:   " + str(self.distance) + "      BEARNING ANGLE:   " + str(self.bearing))
+        ## Append the data to the list to later be saved
+        self.distance_data.append(distances)
 
-    ## This would be lates used to save the data 
-    # def save_data(self):
-    #     # Convert the list to a DataFrame
-    #     df = pd.DataFrame(self.data, columns=['Data'])
+    def angle_callback(self, msg):
+        bearings = msg.data
 
-    #     # Save the DataFrame to a CSV file
-    #     df.to_csv('data_test.csv', index=False)
+        print("BEARNING ANGLE:   " + str(bearings))
 
-    #     # Uncomment the following lines to save data as a rosbag
-    #     # bag = rosbag.Bag('data.bag', 'w')
-    #     # try:
-    #     #     for d in self.data:
-    #     #         bag.write(self.topic_name, d)
-    #     # finally:
-    #     #     bag.close()
+        ## Append the data to the list to later be saved
+        self.bearing_data.append(bearings)
+
+    def save_data(self):
+        ## Convert the lists to numpy arrays
+        np_pose = np.array(self.pose_data)
+        np_distance = np.array(self.distance_data)
+        np_bearing = np.array(self.bearing_data)
+
+        ## Save the numpy arrays to CSV files
+        np.savetxt('pose_data.csv', np_pose, delimiter=',')
+        np.savetxt('distance_data.csv', np_distance, delimiter=',')
+        np.savetxt('bearing_data.csv', np_bearing, delimiter=',')
 
 if __name__ == "__main__":
     # Initialize the node
     rospy.init_node("topic_reader_node")
 
     # Create an instance of the TopicReader class
-    topic_reader = TopicReader("/odom")  # Replace with your topic name
+    topics_reader  = TopicReader("/odom")  # Replace with your topic name
+
 
     # Spin until Ctrl+C is pressed
     rospy.spin()
 
     # After spinning is done, save the data
-    # topic_reader.save_data()
+    topics_reader.save_data()
