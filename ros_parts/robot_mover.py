@@ -27,10 +27,10 @@ class RobotMover:
         ## relation between radius, v, and w: v = r * w
         
         # Linear velocity (forward) in m/s
-        twist.linear.x = 0.1
+        twist.linear.x = 0.07
 
         # Angular velocity (turn) in rad/s
-        twist.angular.z = 0.1
+        twist.angular.z = 0.07
 
         # Publish the message
         self.pub.publish(twist)
